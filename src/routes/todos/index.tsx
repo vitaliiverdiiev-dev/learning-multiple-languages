@@ -91,18 +91,18 @@ function RouteComponent() {
                 key={todo.id}
                 className={cn(
                   "py-2 border-b",
-                  todo.isCompleted ? "text-gray-300" : ""
+                  todo.isCompleted ? "text-gray-400 dark:text-gray-600" : ""
                 )}
               >
                 <div className="flex justify-between items-center">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2">
                     <Checkbox
                       checked={todo.isCompleted}
                       onCheckedChange={() => updateTodo(todo)}
                     />
                     <span>{todo.title}</span>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2">
                     <span className="text-sm">
                       {todo.isCompleted ? "Completed" : "Pending"}
                     </span>
@@ -110,7 +110,7 @@ function RouteComponent() {
                       variant="ghost"
                       size="icon"
                       onClick={() => deleteTodo(todo.id)}
-                      className="hover:text-red-500 hover:bg-red-50"
+                      className="hover:text-red-500 hover:bg-red-50 w-4 h-4 xl:w-6 xl:h-6"
                     >
                       <Trash />
                     </Button>
