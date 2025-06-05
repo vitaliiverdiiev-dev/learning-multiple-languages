@@ -15,7 +15,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as WordsIndexImport } from './routes/words/index'
+import { Route as TodosIndexImport } from './routes/todos/index'
 import { Route as WordsWordImport } from './routes/words/$word'
+import { Route as TodosTodoImport } from './routes/todos/$todo'
 
 // Create Virtual Routes
 
@@ -41,9 +43,21 @@ const WordsIndexRoute = WordsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TodosIndexRoute = TodosIndexImport.update({
+  id: '/todos/',
+  path: '/todos/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const WordsWordRoute = WordsWordImport.update({
   id: '/words/$word',
   path: '/words/$word',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TodosTodoRoute = TodosTodoImport.update({
+  id: '/todos/$todo',
+  path: '/todos/$todo',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -65,11 +79,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/todos/$todo': {
+      id: '/todos/$todo'
+      path: '/todos/$todo'
+      fullPath: '/todos/$todo'
+      preLoaderRoute: typeof TodosTodoImport
+      parentRoute: typeof rootRoute
+    }
     '/words/$word': {
       id: '/words/$word'
       path: '/words/$word'
       fullPath: '/words/$word'
       preLoaderRoute: typeof WordsWordImport
+      parentRoute: typeof rootRoute
+    }
+    '/todos/': {
+      id: '/todos/'
+      path: '/todos'
+      fullPath: '/todos'
+      preLoaderRoute: typeof TodosIndexImport
       parentRoute: typeof rootRoute
     }
     '/words/': {
@@ -87,14 +115,18 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
+  '/todos/$todo': typeof TodosTodoRoute
   '/words/$word': typeof WordsWordRoute
+  '/todos': typeof TodosIndexRoute
   '/words': typeof WordsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
+  '/todos/$todo': typeof TodosTodoRoute
   '/words/$word': typeof WordsWordRoute
+  '/todos': typeof TodosIndexRoute
   '/words': typeof WordsIndexRoute
 }
 
@@ -102,30 +134,49 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
+  '/todos/$todo': typeof TodosTodoRoute
   '/words/$word': typeof WordsWordRoute
+  '/todos/': typeof TodosIndexRoute
   '/words/': typeof WordsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/words/$word' | '/words'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/todos/$todo'
+    | '/words/$word'
+    | '/todos'
+    | '/words'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/words/$word' | '/words'
-  id: '__root__' | '/' | '/about' | '/words/$word' | '/words/'
+  to: '/' | '/about' | '/todos/$todo' | '/words/$word' | '/todos' | '/words'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/todos/$todo'
+    | '/words/$word'
+    | '/todos/'
+    | '/words/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutLazyRoute: typeof AboutLazyRoute
+  TodosTodoRoute: typeof TodosTodoRoute
   WordsWordRoute: typeof WordsWordRoute
+  TodosIndexRoute: typeof TodosIndexRoute
   WordsIndexRoute: typeof WordsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutLazyRoute: AboutLazyRoute,
+  TodosTodoRoute: TodosTodoRoute,
   WordsWordRoute: WordsWordRoute,
+  TodosIndexRoute: TodosIndexRoute,
   WordsIndexRoute: WordsIndexRoute,
 }
 
@@ -141,7 +192,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/todos/$todo",
         "/words/$word",
+        "/todos/",
         "/words/"
       ]
     },
@@ -151,8 +204,14 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.lazy.tsx"
     },
+    "/todos/$todo": {
+      "filePath": "todos/$todo.tsx"
+    },
     "/words/$word": {
       "filePath": "words/$word.tsx"
+    },
+    "/todos/": {
+      "filePath": "todos/index.tsx"
     },
     "/words/": {
       "filePath": "words/index.tsx"
