@@ -17,7 +17,6 @@ import { Route as IndexImport } from './routes/index'
 import { Route as WordsIndexImport } from './routes/words/index'
 import { Route as TodosIndexImport } from './routes/todos/index'
 import { Route as WordsWordImport } from './routes/words/$word'
-import { Route as TodosTodoImport } from './routes/todos/$todo'
 
 // Create Virtual Routes
 
@@ -55,12 +54,6 @@ const WordsWordRoute = WordsWordImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TodosTodoRoute = TodosTodoImport.update({
-  id: '/todos/$todo',
-  path: '/todos/$todo',
-  getParentRoute: () => rootRoute,
-} as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -77,13 +70,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/todos/$todo': {
-      id: '/todos/$todo'
-      path: '/todos/$todo'
-      fullPath: '/todos/$todo'
-      preLoaderRoute: typeof TodosTodoImport
       parentRoute: typeof rootRoute
     }
     '/words/$word': {
@@ -115,7 +101,6 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
-  '/todos/$todo': typeof TodosTodoRoute
   '/words/$word': typeof WordsWordRoute
   '/todos': typeof TodosIndexRoute
   '/words': typeof WordsIndexRoute
@@ -124,7 +109,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
-  '/todos/$todo': typeof TodosTodoRoute
   '/words/$word': typeof WordsWordRoute
   '/todos': typeof TodosIndexRoute
   '/words': typeof WordsIndexRoute
@@ -134,7 +118,6 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
-  '/todos/$todo': typeof TodosTodoRoute
   '/words/$word': typeof WordsWordRoute
   '/todos/': typeof TodosIndexRoute
   '/words/': typeof WordsIndexRoute
@@ -142,30 +125,16 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/about'
-    | '/todos/$todo'
-    | '/words/$word'
-    | '/todos'
-    | '/words'
+  fullPaths: '/' | '/about' | '/words/$word' | '/todos' | '/words'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/todos/$todo' | '/words/$word' | '/todos' | '/words'
-  id:
-    | '__root__'
-    | '/'
-    | '/about'
-    | '/todos/$todo'
-    | '/words/$word'
-    | '/todos/'
-    | '/words/'
+  to: '/' | '/about' | '/words/$word' | '/todos' | '/words'
+  id: '__root__' | '/' | '/about' | '/words/$word' | '/todos/' | '/words/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutLazyRoute: typeof AboutLazyRoute
-  TodosTodoRoute: typeof TodosTodoRoute
   WordsWordRoute: typeof WordsWordRoute
   TodosIndexRoute: typeof TodosIndexRoute
   WordsIndexRoute: typeof WordsIndexRoute
@@ -174,7 +143,6 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutLazyRoute: AboutLazyRoute,
-  TodosTodoRoute: TodosTodoRoute,
   WordsWordRoute: WordsWordRoute,
   TodosIndexRoute: TodosIndexRoute,
   WordsIndexRoute: WordsIndexRoute,
@@ -192,7 +160,6 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/todos/$todo",
         "/words/$word",
         "/todos/",
         "/words/"
@@ -203,9 +170,6 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.lazy.tsx"
-    },
-    "/todos/$todo": {
-      "filePath": "todos/$todo.tsx"
     },
     "/words/$word": {
       "filePath": "words/$word.tsx"
