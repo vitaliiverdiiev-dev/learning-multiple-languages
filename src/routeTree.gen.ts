@@ -13,14 +13,15 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
 import { Route as WordsIndexImport } from './routes/words/index'
 import { Route as TodosIndexImport } from './routes/todos/index'
+import { Route as SignInIndexImport } from './routes/sign-in/index'
 import { Route as WordsWordImport } from './routes/words/$word'
 
 // Create Virtual Routes
 
 const AboutLazyImport = createFileRoute('/about')()
+const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
@@ -30,11 +31,11 @@ const AboutLazyRoute = AboutLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
-const IndexRoute = IndexImport.update({
+const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
 const WordsIndexRoute = WordsIndexImport.update({
   id: '/words/',
@@ -45,6 +46,12 @@ const WordsIndexRoute = WordsIndexImport.update({
 const TodosIndexRoute = TodosIndexImport.update({
   id: '/todos/',
   path: '/todos/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SignInIndexRoute = SignInIndexImport.update({
+  id: '/sign-in/',
+  path: '/sign-in/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -62,7 +69,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/about': {
@@ -77,6 +84,13 @@ declare module '@tanstack/react-router' {
       path: '/words/$word'
       fullPath: '/words/$word'
       preLoaderRoute: typeof WordsWordImport
+      parentRoute: typeof rootRoute
+    }
+    '/sign-in/': {
+      id: '/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInIndexImport
       parentRoute: typeof rootRoute
     }
     '/todos/': {
@@ -99,51 +113,63 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/words/$word': typeof WordsWordRoute
+  '/sign-in': typeof SignInIndexRoute
   '/todos': typeof TodosIndexRoute
   '/words': typeof WordsIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/words/$word': typeof WordsWordRoute
+  '/sign-in': typeof SignInIndexRoute
   '/todos': typeof TodosIndexRoute
   '/words': typeof WordsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
   '/words/$word': typeof WordsWordRoute
+  '/sign-in/': typeof SignInIndexRoute
   '/todos/': typeof TodosIndexRoute
   '/words/': typeof WordsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/words/$word' | '/todos' | '/words'
+  fullPaths: '/' | '/about' | '/words/$word' | '/sign-in' | '/todos' | '/words'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/words/$word' | '/todos' | '/words'
-  id: '__root__' | '/' | '/about' | '/words/$word' | '/todos/' | '/words/'
+  to: '/' | '/about' | '/words/$word' | '/sign-in' | '/todos' | '/words'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/words/$word'
+    | '/sign-in/'
+    | '/todos/'
+    | '/words/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
   WordsWordRoute: typeof WordsWordRoute
+  SignInIndexRoute: typeof SignInIndexRoute
   TodosIndexRoute: typeof TodosIndexRoute
   WordsIndexRoute: typeof WordsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
   WordsWordRoute: WordsWordRoute,
+  SignInIndexRoute: SignInIndexRoute,
   TodosIndexRoute: TodosIndexRoute,
   WordsIndexRoute: WordsIndexRoute,
 }
@@ -161,18 +187,22 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/words/$word",
+        "/sign-in/",
         "/todos/",
         "/words/"
       ]
     },
     "/": {
-      "filePath": "index.tsx"
+      "filePath": "index.lazy.tsx"
     },
     "/about": {
       "filePath": "about.lazy.tsx"
     },
     "/words/$word": {
       "filePath": "words/$word.tsx"
+    },
+    "/sign-in/": {
+      "filePath": "sign-in/index.tsx"
     },
     "/todos/": {
       "filePath": "todos/index.tsx"

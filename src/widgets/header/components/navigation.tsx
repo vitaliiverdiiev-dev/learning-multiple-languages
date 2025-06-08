@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
 export const Navigation = () => {
+  
   return (
     <nav>
       <div className="p-2 flex gap-2">

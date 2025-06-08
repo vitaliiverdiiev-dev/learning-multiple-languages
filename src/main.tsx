@@ -7,6 +7,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { ThemeProvider } from "./app/providers/theme-provider";
 import { ReactQueryProvider } from "./app/providers/react-query.provider";
+import { AuthProvider } from "./app/providers/auth/auth.provider";
 
 const router = createRouter({ routeTree });
 
@@ -21,11 +22,13 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <ReactQueryProvider>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </ReactQueryProvider>
+      {/* <AuthProvider> */}
+        <ReactQueryProvider>
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </ReactQueryProvider>
+      {/* </AuthProvider> */}
     </StrictMode>
   );
 }
